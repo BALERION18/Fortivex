@@ -25,7 +25,7 @@ export function calculateEntropy(str) {
 
 /**
  * Safely masks a secret string so it can be previewed without revealing the raw credential.
- * Example: "ghp_0123456789abcdefghijklmnopqrstuvwxyz" -> "ghp_...wxyz"
+ * Example: "ghp_sample_token_mock_key" -> "ghp_..._key"
  */
 export function maskSecret(secret) {
   if (!secret || typeof secret !== 'string') return '****';
@@ -212,6 +212,22 @@ export function scanRepositoryFiles(files = [], commitSha = 'HEAD') {
   for (const file of filesToScan) {
     if (file.skipped) {
       skippedFiles.push({ file: file.path, reason: file.reason || file.error });
+      continue;
+    }
+
+    // Exclude automated test suites and mock fixtures from production secret scanning
+    const p = (file.path || '').toLowerCase();
+    if (
+      p.includes('/tests/') ||
+      p.includes('/test/') ||
+      p.startsWith('tests/') ||
+      p.startsWith('test/') ||
+      p.includes('.test.') ||
+      p.includes('.spec.') ||
+      p.includes('/fixtures/') ||
+      p.includes('/mocks/')
+    ) {
+      skippedFiles.push({ file: file.path, reason: 'Test file / mock fixture excluded from production credential audit' });
       continue;
     }
 

@@ -22,6 +22,21 @@ function validateParams(req, res, next) {
  */
 function isHighValueFile(path) {
   const p = path.toLowerCase();
+
+  // Exclude automated test suites and fixtures from production credential scans
+  if (
+    p.includes('/tests/') ||
+    p.includes('/test/') ||
+    p.startsWith('tests/') ||
+    p.startsWith('test/') ||
+    p.includes('.test.') ||
+    p.includes('.spec.') ||
+    p.includes('/fixtures/') ||
+    p.includes('/mocks/')
+  ) {
+    return false;
+  }
+
   return (
     p.includes('.env') ||
     p.includes('config') ||
