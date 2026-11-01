@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
@@ -61,7 +61,7 @@ jobs:
     if: ${{ !inputs.skip_deployment }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Log Deployment Notice
         run: |
