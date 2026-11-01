@@ -46,7 +46,7 @@ jobs:
           tar -czf repolens-backend-bundle.tar.gz -C backend package.json package-lock.json src
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
