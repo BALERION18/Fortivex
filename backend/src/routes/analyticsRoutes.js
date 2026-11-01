@@ -48,8 +48,9 @@ router.get('/insights/:owner/:repo', async (req, res, next) => {
     const pkgEntry = treeFiles.find((f) => f.path === 'package.json');
     if (pkgEntry) {
       try {
-        const pkgContent = await getFileContent(owner, repo, 'package.json', ref);
-        packageJson = JSON.parse(pkgContent);
+        const pkgRes = await getFileContent(owner, repo, 'package.json', ref);
+        const rawPkg = typeof pkgRes === 'string' ? pkgRes : pkgRes.content || '{}';
+        packageJson = JSON.parse(rawPkg);
       } catch {
         packageJson = null;
       }
@@ -58,7 +59,8 @@ router.get('/insights/:owner/:repo', async (req, res, next) => {
     const readmeEntry = treeFiles.find((f) => /^(?:README|readme)\.md$/i.test(f.path));
     if (readmeEntry) {
       try {
-        readmeText = await getFileContent(owner, repo, readmeEntry.path, ref);
+        const readmeRes = await getFileContent(owner, repo, readmeEntry.path, ref);
+        readmeText = typeof readmeRes === 'string' ? readmeRes : readmeRes.content || '';
       } catch {
         readmeText = '';
       }
