@@ -14,7 +14,7 @@
     "start:backend": "npm run start --prefix backend"
   },
   "devDependencies": {
-    "concurrently": "^10.0.6"
+    "concurrently": "^10.0.7"
   },
   "dependencies": {
     "pdfkit": "^0.20.2"
